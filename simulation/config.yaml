@@ -1,0 +1,159 @@
+# HighEfficiencyGlide Simulation Configuration
+# =============================================
+
+# Project metadata
+project:
+  name: "HighEfficiencyGlide"
+  version: "0.1.0"
+  description: "Solar-powered autonomous glider optimization"
+
+# Target specifications
+target:
+  wingspan_range: [3.0, 5.0]  # meters
+  weight_range: [10.0, 20.0]  # kg
+  min_glide_ratio: 40.0
+  min_solar_power: 100.0  # Watts
+
+# Wing geometry defaults
+wing:
+  wingspan: 4.0  # m
+  root_chord: 0.35  # m
+  taper_ratio: 0.45
+  sweep_angle: 0.0  # degrees
+  dihedral_angle: 3.0  # degrees
+  twist: -3.0  # degrees (washout)
+  airfoil: "HQW2512"
+
+# Mass properties (kg)
+mass:
+  structure: 8.0
+  payload: 2.0
+  battery: 2.5
+  solar_cells: 1.5
+  avionics: 0.5
+  cg_position: 0.28  # fraction of MAC
+
+# Solar panel configuration
+solar:
+  cell_type: "monocrystalline"
+  cell_efficiency: 0.22  # 22%
+  packing_factor: 0.85
+  span_coverage: [0.05, 0.90]  # fraction of semispan
+  chord_coverage: [0.10, 0.70]  # fraction of local chord
+  weight_per_area: 0.8  # kg/m²
+
+# Power consumption (Watts)
+power:
+  flight_controller: 3.0
+  servos_idle: 2.0
+  servos_active: 8.0
+  telemetry: 1.5
+  compute_idle: 5.0
+  compute_vision: 15.0
+  total_idle: 11.5
+  total_active: 30.0
+
+# Simulation parameters
+simulation:
+  # Atmospheric conditions
+  altitude_range: [0, 3000]  # m
+  reference_altitude: 1000  # m
+
+  # Velocity range
+  v_min: 8.0  # m/s
+  v_max: 40.0  # m/s
+
+  # Analysis resolution
+  velocity_points: 50
+  spanwise_panels: 30
+
+  # Convergence criteria
+  tolerance: 1e-6
+  max_iterations: 100
+
+# Optimization settings
+optimization:
+  algorithm: "NSGA-II"
+  population_size: 100
+  generations: 50
+
+  # Decision variables
+  variables:
+    wingspan: [3.0, 5.0]
+    aspect_ratio: [15.0, 25.0]
+    taper_ratio: [0.3, 0.6]
+    twist: [-5.0, 0.0]
+
+  # Objectives (minimize)
+  objectives:
+    - name: "negative_glide_ratio"  # Maximize L/D
+      weight: 1.0
+    - name: "negative_solar_area"   # Maximize solar area
+      weight: 0.5
+
+  # Constraints
+  constraints:
+    min_stability_margin: 0.05  # 5% MAC
+    max_wing_loading: 100.0  # N/m²
+    min_stall_speed: 8.0  # m/s
+    max_weight: 20.0  # kg
+
+# Test scenarios
+scenarios:
+  calm:
+    wind_speed: 0.0
+    turbulence_intensity: 0.0
+    name: "Calm conditions"
+
+  light_wind:
+    wind_speed: 5.0  # m/s
+    wind_direction: 0.0  # degrees from north
+    turbulence_intensity: 0.1
+    name: "Light wind"
+
+  moderate_wind:
+    wind_speed: 10.0
+    wind_direction: 45.0
+    turbulence_intensity: 0.2
+    name: "Moderate wind"
+
+  gusty:
+    wind_speed: 8.0
+    gust_amplitude: 5.0  # m/s
+    gust_frequency: 0.1  # Hz
+    turbulence_intensity: 0.3
+    name: "Gusty conditions"
+
+  thermal:
+    updraft_strength: 2.0  # m/s
+    thermal_diameter: 200  # m
+    name: "Thermal soaring"
+
+# ArduPilot integration
+ardupilot:
+  # Soaring parameters (computed)
+  soar_enable: true
+  soar_vspeed: 0.7  # m/s - minimum climb rate to start thermalling
+  soar_alt_cutoff: 100  # m AGL - minimum altitude for soaring
+  soar_alt_max: 500  # m AGL - maximum altitude
+
+  # TECS tuning
+  tecs_spdweight: 2.0  # Favor altitude control
+  tecs_time_const: 5.0  # seconds
+
+  # Airspeed limits
+  arspd_fb_ratio: 0.5
+  trim_arspd_cm: 1500  # cm/s = 15 m/s
+
+# Visualization settings
+visualization:
+  default_colormap: "viridis"
+  figure_dpi: 150
+  save_format: "png"
+  3d_renderer: "pyvista"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "simulation.log"
+  console: true
