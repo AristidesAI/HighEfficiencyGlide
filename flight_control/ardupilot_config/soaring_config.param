@@ -1,0 +1,163 @@
+# HighEfficiencyGlide - Soaring (Thermal) Configuration
+# =====================================================
+# ArduSoar parameters for autonomous thermal soaring
+#
+# Reference: https://ardupilot.org/plane/docs/soaring.html
+# Paper: "ArduSoar: an Open-Source Thermalling Controller"
+#
+# Load after glider_params.param:
+#   param load soaring_config.param
+
+# ============================================
+# SOARING ENABLE
+# ============================================
+# Enable soaring controller
+SOAR_ENABLE,1
+
+# ============================================
+# POLAR PARAMETERS
+# ============================================
+# These define the glider's sink rate vs airspeed curve
+# Sink rate = POLAR_CD0 + POLAR_B*CL + POLAR_K*CL^2
+#
+# SOAR_POLAR_K is the most critical parameter:
+#   K = 16 * mass(kg) / wing_area(m²)
+#   For 14kg, 0.8m² wing: K = 16 * 14 / 0.8 = 280
+
+SOAR_POLAR_K,280.0
+
+# Zero-lift drag coefficient (parasitic drag)
+# Typical for clean glider: 0.015-0.030
+SOAR_POLAR_CD0,0.020
+
+# Linear lift-dependent drag term
+# Typical: 0.03-0.08
+SOAR_POLAR_B,0.05
+
+# ============================================
+# VARIO (VERTICAL SPEED) THRESHOLDS
+# ============================================
+# Minimum climb rate to trigger thermal search (m/s)
+# Higher value = more selective about thermals
+SOAR_VSPEED,0.7
+
+# Minimum climb rate to stay in thermal (m/s)
+SOAR_MIN_THML_S,-0.2
+
+# Expected sink rate in still air (m/s)
+# Should match polar calculation at cruise speed
+SOAR_EXP_SINK,0.6
+
+# ============================================
+# ALTITUDE LIMITS
+# ============================================
+# Minimum altitude AGL for soaring (m)
+# Below this, will exit soaring and resume mission
+SOAR_ALT_CUTOFF,100
+
+# Maximum altitude AGL for soaring (m)
+# Above this, will exit thermal to continue mission
+SOAR_ALT_MAX,400
+
+# Minimum altitude to start thermalling (m)
+SOAR_ALT_MIN,80
+
+# ============================================
+# THERMAL CENTERING
+# ============================================
+# Thermal centering algorithm parameters
+
+# Maximum drift distance before recentering (m)
+SOAR_MAX_DRIFT,50
+
+# Thermal tracking filter time constant
+SOAR_THML_TC,10.0
+
+# Maximum thermal bank angle (deg)
+SOAR_THML_BANK,40
+
+# Thermal radius estimate (m)
+SOAR_THML_RAD,60
+
+# ============================================
+# MODE TRANSITIONS
+# ============================================
+# Distance from home to disable soaring (m)
+# Ensures RTL works when close to home
+SOAR_MAX_RADIUS,2000
+
+# Minimum time in thermal before exit check (s)
+SOAR_MIN_CTIME,30
+
+# Maximum time in any single thermal (s)
+SOAR_MAX_CTIME,300
+
+# Distance from waypoint to suppress soaring (m)
+SOAR_WP_DIST,100
+
+# ============================================
+# NETTO VARIOMETER
+# ============================================
+# Netto vario compensates for aircraft sink
+# Enables proper thermal detection
+
+# Enable netto variometer
+SOAR_NETTO_EN,1
+
+# ============================================
+# CRUISE OPTIMIZATION
+# ============================================
+# Enable cruise speed optimization based on lift
+SOAR_CRSE_OPT,1
+
+# MacCready ring equivalent speed (m/s)
+# Cruise faster when strong thermals expected
+SOAR_MC_CRUISE,1.0
+
+# ============================================
+# THERMAL MODEL
+# ============================================
+# Extended Kalman Filter parameters for thermal estimation
+
+# Process noise (thermal position uncertainty)
+SOAR_Q_POSITION,0.001
+
+# Process noise (thermal strength uncertainty)
+SOAR_Q_STRENGTH,0.0001
+
+# Measurement noise (vertical speed)
+SOAR_R_VSPEED,0.5
+
+# ============================================
+# SAFETY LIMITS
+# ============================================
+# Maximum roll angle in thermal (deg)
+SOAR_MAX_ROLL,45
+
+# Minimum airspeed margin above stall (m/s)
+SOAR_MIN_ARSPD,3.0
+
+# Exit thermal if airspeed drops below (m/s)
+SOAR_EXIT_ARSPD,12.0
+
+# ============================================
+# MISSION INTEGRATION
+# ============================================
+# Soaring modes:
+# 0 = Disabled
+# 1 = Thermal only (opportunistic in AUTO)
+# 2 = Thermal + cruise optimization
+
+SOAR_MODE,2
+
+# Resume mission after thermal exit
+SOAR_MISSION_RSM,1
+
+# ============================================
+# TUNING AIDS
+# ============================================
+# Enable soaring debug messages
+SOAR_DEBUG,1
+
+# Log thermal data at high rate
+LOG_BITMASK,176126

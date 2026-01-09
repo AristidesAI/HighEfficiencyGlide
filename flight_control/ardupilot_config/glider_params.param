@@ -1,0 +1,249 @@
+# HighEfficiencyGlide - ArduPilot Parameter File
+# ==============================================
+# Base configuration for solar-powered glider
+# Target: 4m wingspan, 14kg, AR=20
+#
+# Load with: param load glider_params.param
+# Or in Mission Planner: Config/Full Parameter List -> Load from file
+
+# ============================================
+# FRAME TYPE
+# ============================================
+# Set frame class to Plane
+FRAME_CLASS,1
+
+# ============================================
+# FLIGHT MODES
+# ============================================
+# Mode 1: Manual (for testing)
+# Mode 2: FBWA (Fly-by-Wire A - stabilized)
+# Mode 3: AUTO (autonomous waypoint)
+# Mode 4: LOITER (hold position/circle)
+# Mode 5: RTL (Return to Launch)
+# Mode 6: THERMAL (soaring mode)
+
+FLTMODE1,0
+FLTMODE2,5
+FLTMODE3,10
+FLTMODE4,12
+FLTMODE5,11
+FLTMODE6,24
+
+# Flight mode channel
+FLTMODE_CH,8
+
+# ============================================
+# AIRSPEED CONFIGURATION
+# ============================================
+# Airspeed sensor enable
+ARSPD_ENABLE,1
+ARSPD_TYPE,1
+ARSPD_USE,1
+ARSPD_AUTOCAL,1
+
+# Airspeed limits (m/s * 100 = cm/s)
+# Stall speed ~10 m/s, never exceed ~35 m/s
+ARSPD_FBW_MIN,1200
+ARSPD_FBW_MAX,2500
+
+# Trim airspeed (best glide ~18 m/s)
+TRIM_ARSPD_CM,1800
+
+# Airspeed ratio calibration
+ARSPD_RATIO,1.9936
+
+# ============================================
+# THROTTLE CONFIGURATION
+# ============================================
+# For glider with optional motor
+THR_MIN,0
+THR_MAX,100
+THR_SLEWRATE,100
+
+# Throttle for cruise (0 for pure glider)
+TRIM_THROTTLE,0
+
+# Motor enable only when needed
+THR_PASS_STAB,0
+
+# ============================================
+# TECS - Total Energy Control System
+# ============================================
+# Critical for glider performance
+
+# Speed/Height priority (2.0 = prioritize speed in glide)
+TECS_SPDWEIGHT,2.0
+
+# Time constant (larger = smoother control)
+TECS_TIME_CONST,5.0
+
+# Throttle damping
+TECS_THR_DAMP,0.5
+
+# Pitch limits
+TECS_PITCH_MAX,20
+TECS_PITCH_MIN,-15
+
+# Sink rate limits
+TECS_SINK_MIN,0.5
+TECS_SINK_MAX,5.0
+
+# Climb rate (with motor if equipped)
+TECS_CLMB_MAX,3.0
+
+# Energy/height error integrator
+TECS_INTEG_GAIN,0.1
+
+# ============================================
+# PITCH/ROLL TUNING
+# ============================================
+# Roll controller
+RLL_RATE_P,0.08
+RLL_RATE_I,0.05
+RLL_RATE_D,0.003
+RLL_RATE_FF,0.3
+
+# Pitch controller
+PTCH_RATE_P,0.1
+PTCH_RATE_I,0.05
+PTCH_RATE_D,0.004
+PTCH_RATE_FF,0.3
+
+# Maximum roll angle
+LIM_ROLL_CD,4500
+
+# Pitch limits
+LIM_PITCH_MAX,2000
+LIM_PITCH_MIN,-1500
+
+# ============================================
+# YAW/RUDDER
+# ============================================
+# Rudder mixing for coordinated turns
+KFF_RDDRMIX,0.5
+RUDD_DT_GAIN,10
+
+# Yaw damper
+YAW_RATE_P,0.2
+YAW_RATE_I,0.05
+YAW_RATE_D,0
+
+# ============================================
+# NAVIGATION
+# ============================================
+# Waypoint radius
+WP_RADIUS,30
+
+# Loiter radius (for thermalling - smaller is better)
+WP_LOITER_RAD,50
+
+# Navigation controller
+NAVL1_PERIOD,20
+NAVL1_DAMPING,0.75
+
+# ============================================
+# BATTERY MONITORING
+# ============================================
+BATT_MONITOR,4
+BATT_VOLT_PIN,2
+BATT_CURR_PIN,3
+BATT_VOLT_MULT,11.0
+BATT_AMP_PERVLT,17.0
+BATT_CAPACITY,5000
+BATT_LOW_VOLT,10.5
+BATT_CRT_VOLT,9.9
+
+# ============================================
+# FAILSAFE
+# ============================================
+# Throttle failsafe
+THR_FAILSAFE,1
+THR_FS_VALUE,950
+
+# Battery failsafe (RTL on low battery)
+BATT_FS_LOW_ACT,1
+BATT_FS_CRT_ACT,2
+
+# GCS failsafe
+FS_GCS_ENABL,1
+FS_SHORT_ACTN,0
+FS_LONG_ACTN,1
+FS_LONG_TIMEOUT,20
+
+# ============================================
+# SERVO CONFIGURATION
+# ============================================
+# Typical glider setup:
+# SERVO1 = Aileron
+# SERVO2 = Elevator
+# SERVO4 = Rudder
+# SERVO3 = Throttle (if motor equipped)
+
+SERVO1_FUNCTION,4
+SERVO1_MIN,1000
+SERVO1_MAX,2000
+SERVO1_TRIM,1500
+
+SERVO2_FUNCTION,19
+SERVO2_MIN,1000
+SERVO2_MAX,2000
+SERVO2_TRIM,1500
+
+SERVO3_FUNCTION,70
+SERVO3_MIN,1000
+SERVO3_MAX,2000
+SERVO3_TRIM,1000
+
+SERVO4_FUNCTION,21
+SERVO4_MIN,1000
+SERVO4_MAX,2000
+SERVO4_TRIM,1500
+
+# Flaps (if equipped)
+SERVO5_FUNCTION,2
+SERVO5_MIN,1000
+SERVO5_MAX,2000
+SERVO5_TRIM,1000
+
+# ============================================
+# LOGGING
+# ============================================
+LOG_BITMASK,176126
+LOG_DISARMED,1
+LOG_REPLAY,0
+
+# ============================================
+# TELEMETRY
+# ============================================
+SERIAL1_PROTOCOL,1
+SERIAL1_BAUD,57
+
+SR1_EXTRA1,4
+SR1_EXTRA2,4
+SR1_EXTRA3,2
+SR1_PARAMS,10
+SR1_POSITION,2
+SR1_RAW_CTRL,2
+SR1_RAW_SENS,2
+SR1_RC_CHAN,2
+
+# ============================================
+# ARMING
+# ============================================
+ARMING_CHECK,1
+ARMING_RUDDER,2
+
+# ============================================
+# MISCELLANEOUS
+# ============================================
+# Ground steer disable (glider)
+GROUND_STEER_ALT,0
+
+# Scaling airspeed (use TAS internally)
+SCALING_SPEED,15
+
+# Stall prevention
+STALL_PREVENTION,1
+
+# Flight options
+FLIGHT_OPTIONS,0
